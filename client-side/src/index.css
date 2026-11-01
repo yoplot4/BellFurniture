@@ -1,0 +1,41 @@
+@import "tailwindcss"; /* Or @tailwind base; @tailwind components; @tailwind utilities; depending on your Tailwind version */
+
+@layer base {
+  /* 1. Global Reset & Box-Sizing Configuration */
+  *, ::before, ::after {
+    box-sizing: border-box; /* Ensures padding/borders don't break layout width */
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 2. Global Document Constraints */
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden; /* Bulletproof shield against accidental horizontal scrolling */
+    scroll-behavior: smooth; /* Smooth scroll links by default */
+    background-color: #f9fafb; /* gray-50 */
+    color: #1f2937; /* gray-800 */
+  }
+
+  /* 3. Global Typography Application */
+  body {
+    @apply font-sans antialiased; 
+    /* @apply pulls Tailwind's utility values right into the CSS layer. 
+       'antialiased' makes text render sharper and smoother on Macs/screens. */
+  }
+}
+
+@theme {
+  --animate-fade-in-up: fadeInUp 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
