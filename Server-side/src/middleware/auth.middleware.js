@@ -28,25 +28,25 @@ export const registerSchema = z.object({
 });
 
 export const validateRegister = (req, res, next) => {
-	// safeParse prevents throwing runtime errors and instead returns a success flag
-	const result = registerSchema.safeParse(req.body);
+  // safeParse prevents throwing runtime errors and instead returns a success flag
+  const result = registerSchema.safeParse(req.body);
 
-	if (!result.success) {
-		// format errors into a clean, readable layout for your frontend
-		const errorMessages = result.error.errors.map((err) => ({
-			field: err.path[0],
-			message: err.message,
-		}));
+  if (!result.success) {
+    // errors የሚለውን በ Zod ውስጥ በ issues ፋንታ መቀየር ወይም error.issues መጠቀም ይኖርብናል
+    const errorMessages = result.error.issues.map((err) => ({
+      field: err.path[0],
+      message: err.message,
+    }));
 
-		return res.status(400).json({
-			success: false,
-			errors: errorMessages,
-		});
-	}
+    return res.status(400).json({
+      success: false,
+      errors: errorMessages,
+    });
+  }
 
-	// Overwrite req.body with the sanitized/cleaned data output from Zod
-	req.body = result.data;
-	next();
+  // Overwrite req.body with the sanitized/cleaned data output from Zod
+  req.body = result.data;
+  next();
 };
 
 export const loginSchema= z.object({
