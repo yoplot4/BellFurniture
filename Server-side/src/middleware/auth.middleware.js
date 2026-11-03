@@ -95,35 +95,51 @@ export const loginValidater = (req, res, next) => {
   }
 };
 
-export const verifyToken= (req, res, next)=>{
-	// 1. get heaader from http authorization header
-		const authHeader = req.headers.authorization;
-	if(!authHeadr || !authHeader.startsWith('Bearer ')){
-		return res.status(401).json({ 
-			success: false,
-			message: "Access denied. No token provided." 
-		});
-	}
-	const token = authHeader.split(' ')[1];
 
-	if (!token) {
-		return res.status(401).json({
-			success: false,
-			message: "A Bearer token is required",
-		});
-	}
-	try {
-    // 2. Verify token using your cryptographically secure JWT_SECRET
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    // 3. Attach the decoded user data (id, email, role) straight to the request object
+
+
+export const verifyToken = (req, res, next) => {
+  try {
+    // 1. Get the Authorization header
+    const authHeader = req.headers.authorization;
+
+    // 2. Check whether the Bearer token exists
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Access denied. No token provided."
+      });
+    }
+
+    // 3. Extract the token
+    const token = authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "A Bearer token is required."
+      });
+    }
+
+    // 4. Verify the JWT
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRETE
+    );
+
+    // 5. Attach authenticated user information
     req.user = decoded;
-    next(); // Pass control over to the secure controller safely
-  } catch (error) {
-    return res.status(403).json({ success: false, message: "Invalid or expired token." });
-  }
 
-}
+    // 6. Continue to the next middleware
+    next();
+
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token."
+    });
+  }
+};
 // 2. Authorization Middleware: Limits access based on user roles
 export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {

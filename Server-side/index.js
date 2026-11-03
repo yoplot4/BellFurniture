@@ -6,6 +6,7 @@ import { dbExcute } from './src/dbConfig/dbConnect.js';
 import { installRout } from './src/Routes/install.routes.js';
 import { authRoute } from './src/Routes/auth.routes.js';
 import { userRoute } from './src/Routes/manageUser.routes.js';
+import { employeeRoute } from './src/Routes/manageEmployee.routes.js';
 // Capitalize variable names carefully (good practice is lowercase 'port' or uppercase 'PORT')
 const PORT = process.env.PORT || 5000; 
 
@@ -18,9 +19,10 @@ app.get('/health', (req, res)=>{
   res.send(" the server is listen properly")
 })
 
-app.use('/api', installRout)
-app.use('/api', authRoute)
-app.use('/api', userRoute)
+app.use('/api', installRout);
+app.use('/api', authRoute);
+app.use('/api', userRoute);
+app.use('/api', employeeRoute);
 // Pass the PORT variable first, then the callback function
 app.listen(PORT, async () => {
   console.log(`The Server is listening on port ${PORT}`);

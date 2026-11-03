@@ -69,7 +69,7 @@ const loginController= async (req, res)=>{
       payLoad,
       process.env.JWT_SECRETE,
       {
-        expiresIn:'1d'
+        expiresIn:'12h'
       }
     )
     

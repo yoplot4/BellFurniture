@@ -10,7 +10,8 @@ import {
 	FaTrashCan,
 	FaXmark,
 } from "react-icons/fa6";
-
+// import the token provider called getAuth
+import { getAuth } from "../../../utils/Auth";
 import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/manage-users";
@@ -53,10 +54,15 @@ const ManageUser = () => {
 	// ==========================================
 	// 2. FETCH USERS FROM DATABASE
 	// ==========================================
+	const auth = getAuth();
 
 	const fetchUsers = async () => {
 		try {
-			const response = await axios.get(`${API_URL}/users`);
+			const response = await axios.get(`${API_URL}/users`,{
+        headers:{
+          Authorization:`Bearer ${auth.token}`
+        }
+      });
 
 			console.log("API Response:", response.data);
 
@@ -115,7 +121,11 @@ const ManageUser = () => {
 		try {
 			setIsSubmitting(true);
 
-			await axios.post(`${API_URL}/register`, formData);
+			await axios.post(`${API_URL}/register`, formData,{
+        headers:{
+          Authorization:`Bearer ${auth.token}`
+        }
+      });
 
 			alert("User registered successfully!");
 
@@ -188,7 +198,11 @@ const ManageUser = () => {
 			// Send PUT request to Express backend
 			const response = await axios.patch(
 				`${API_URL}/${userToEdit}`,
-				updateData,
+				updateData,{
+        headers:{
+          Authorization:`Bearer ${auth.token}`
+        }
+      }
 			);
 
 			console.log("Update response:", response.data);
@@ -238,7 +252,11 @@ const ManageUser = () => {
 			setIsDeleting(true);
 
 			// Send DELETE request to Express backend
-			const response = await axios.delete(`${API_URL}/${userToDelete}`);
+			const response = await axios.delete(`${API_URL}/${userToDelete}`,{
+        headers:{
+          Authorization:`Bearer ${auth.token}`
+        }
+      });
 
 			console.log("Delete response:", response.data);
 
